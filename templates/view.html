@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrower List</title>
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 0.7rem 2.2rem;
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+            transition: background 0.2s, transform 0.2s;
+            text-align: center;
+            position: fixed;
+            top: 32px;
+            left: 32px;
+            margin: 0;
+            z-index: 10;
+            animation: fadeInLeft 0.8s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        .back-btn:hover {
+            background: linear-gradient(90deg, #818cf8 60%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            color: #fff;
+        }
+        .table-container {
+            max-width: 700px;
+            margin: 2.5rem auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+            padding: 2rem 2.5rem 2.5rem 2.5rem;
+            animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        h2 {
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            animation: fadeInDown 0.7s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        /* Search bar styles */
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1s;
+        }
+        .search-bar input {
+            padding: 0.5rem 1rem;
+            border-radius: 0.7rem;
+            border: 1.5px solid #c7d2fe;
+            font-size: 1rem;
+            width: 140px;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .search-bar input:focus {
+            border: 1.5px solid #6366f1;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+            outline: none;
+        }
+        .search-bar input:last-child {
+            width: 180px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            animation: fadeIn 1.1s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        th, td {
+            padding: 0.85rem 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1rem;
+        }
+        th {
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr {
+            transition: background 0.2s, transform 0.2s;
+        }
+        tr:hover td {
+            background: #eef2ff;
+            transform: scale(1.01);
+        }
+        .no-data {
+            text-align: center;
+            color: #be123c;
+            font-weight: 500;
+            padding: 1.5rem 0;
+            background: #fef2f2;
+            border-radius: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .table-container {
+                padding: 1rem 0.2rem 1.2rem 0.2rem;
+            }
+            .back-btn {
+                left: 10px;
+                top: 10px;
+                padding: 0.6rem 1.1rem;
+                font-size: 0.95rem;
+            }
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            .search-bar input {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">Back to Home</a>
+    <div class="table-container">
+        <h2>Borrower List</h2>
+        <!-- Search Bar Start -->
+        <div class="search-bar">
+            <input type="text" id="searchId" placeholder="Search by ID">
+            <input type="text" id="searchName" placeholder="Search by Name">
+        </div>
+        <!-- Search Bar End -->
+        <table id="borrowerTable">
+            <thead>
+                <tr>
+                    <th>Borrower ID</th>
+                    <th>Name</th>
+                    <th>Total Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in views %}
+                    <tr>
+                        <td>{{post.borrower_id}}</td>
+                        <td>{{post.b_name}}</td>
+                        <td>{{post.total_amount}}</td>
+                        <td>
+                            <a href="/transaction_history?borrower_id={{post.borrower_id}}&name={{post.b_name}}" class="back-btn" style="padding:0.4rem 1.2rem;font-size:0.95rem;position:static;box-shadow:none;">View History</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="no-data">No data available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Simple client-side search for ID and Name
+        const searchId = document.getElementById('searchId');
+        const searchName = document.getElementById('searchName');
+        const table = document.getElementById('borrowerTable');
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        function filterTable() {
+            const idVal = searchId.value.trim().toLowerCase();
+            const nameVal = searchName.value.trim().toLowerCase();
+            let anyVisible = false;
+            for (let i = 0; i < rows.length; i++) {
+                // Skip "no data" row
+                if (rows[i].querySelector('.no-data')) continue;
+                const idCell = rows[i].cells[0]?.textContent.toLowerCase() || "";
+                const nameCell = rows[i].cells[1]?.textContent.toLowerCase() || "";
+                const show = 
+                    (idVal === "" || idCell.includes(idVal)) &&
+                    (nameVal === "" || nameCell.includes(nameVal));
+                rows[i].style.display = show ? "" : "none";
+                if (show) anyVisible = true;
+            }
+            // Show/hide "no data" row
+            const noDataRow = table.querySelector('.no-data')?.parentElement;
+            if (noDataRow) noDataRow.style.display = anyVisible ? "none" : "";
+        }
+        searchId.addEventListener('input', filterTable);
+        searchName.addEventListener('input', filterTable);
+    </script>
+</body>
+</html>

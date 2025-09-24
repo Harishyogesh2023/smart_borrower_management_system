@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Borrower</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #c7d2fe 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 2.5rem;
+            padding-top: 60px;
+        }
+        .form-container {
+            background: #fff;
+            padding: 2.5rem 2.5rem 2rem 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            width: 350px;
+            position: relative;
+            animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
+            margin-bottom: 1.5rem;
+        }
+        .modify-container {
+            border: 2px solid #6366f1;
+            box-shadow: 0 8px 32px 0 rgba(99,102,241,0.13);
+            animation: fadeInUp 1.1s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 40px, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        h2 {
+            color: #be123c;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            animation: fadeInDown 0.7s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        .modify-container h2 {
+            color: #3730a3;
+            animation-delay: 0.2s;
+        }
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            animation: fadeIn 1.1s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        label {
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 0.3rem;
+        }
+        .styled-select {
+            padding: 0.7rem 1rem;
+            border: 1px solid #c7d2fe;
+            border-radius: 1rem;
+            font-size: 1rem;
+            outline: none;
+            background: #f8fafc;
+            color: #3730a3;
+            transition: border 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px 0 rgba(99,102,241,0.04);
+            margin-bottom: 0.5rem;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        .styled-select:focus {
+            border: 1.5px solid #be123c;
+            box-shadow: 0 2px 8px 0 rgba(190,18,60,0.10);
+            background: #fff;
+        }
+        .styled-input {
+            padding: 0.7rem 1rem;
+            border: 1px solid #c7d2fe;
+            border-radius: 1rem;
+            font-size: 1rem;
+            outline: none;
+            background: #f8fafc;
+            color: #3730a3;
+            transition: border 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px 0 rgba(99,102,241,0.04);
+            margin-bottom: 0.5rem;
+        }
+        .styled-input:focus {
+            border: 1.5px solid #be123c;
+            box-shadow: 0 2px 8px 0 rgba(190,18,60,0.10);
+            background: #fff;
+        }
+        /* Remove spinner arrows in number input for all browsers */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .delete-btn {
+            margin-top: 1rem;
+            padding: 0.9rem 0;
+            background: linear-gradient(90deg, #be123c 0%, #f87171 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px 0 rgba(190, 18, 60, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .delete-btn:hover, .delete-btn:focus {
+            background: linear-gradient(90deg, #f87171 0%, #be123c 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 24px 0 rgba(190, 18, 60, 0.18);
+        }
+        .delete-btn:active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 120%;
+            height: 300%;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            animation: ripple-effect 0.6s linear;
+        }
+        @keyframes ripple-effect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        .modify-btn {
+            margin-top: 1rem;
+            padding: 0.9rem 0;
+            background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px 0 rgba(99,102,241,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .modify-btn:hover, .modify-btn:focus {
+            background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 24px 0 rgba(99,102,241,0.18);
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px 0 rgba(99, 102, 241, 0.10);
+            position: fixed;
+            top: 32px;
+            left: 32px;
+            margin-top: 0;
+            z-index: 10;
+            animation: fadeInLeft 0.8s cubic-bezier(.23,1.01,.32,1) both;
+        }
+        @keyframes fadeInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .back-btn:hover, .back-btn:focus {
+            background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .message {
+            margin: 1.2rem 0 0 0;
+            color: #fff;
+            text-align: center;
+            font-weight: 600;
+            background: linear-gradient(90deg, #be123c 0%, #f87171 100%);
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            border: 1.5px solid #be123c;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 12px 0 rgba(190,18,60,0.10);
+            animation: fadeInMessage 0.7s cubic-bezier(.23,1.01,.32,1) both;
+            letter-spacing: 0.5px;
+        }
+        .modify-message {
+            background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+            border: 1.5px solid #6366f1;
+            color: #fff;
+            margin: 1.2rem 0 0 0;
+            text-align: center;
+            font-weight: 600;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.08rem;
+            box-shadow: 0 2px 12px 0 rgba(99,102,241,0.10);
+            animation: fadeInMessage 0.7s cubic-bezier(.23,1.01,.32,1) both;
+            letter-spacing: 0.5px;
+        }
+        @keyframes fadeInMessage {
+            0% {
+                opacity: 0;
+                transform: scale(0.95) translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .message-placeholder {
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                padding-top: 70px;
+            }
+            .form-container {
+                margin-bottom: 2.5rem;
+            }
+        }
+        @media (max-width: 500px) {
+            .form-container {
+                width: 98vw;
+                padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+            }
+            .back-btn {
+                left: 10px;
+                top: 10px;
+                padding: 0.6rem 1.1rem;
+                font-size: 0.95rem;
+            }
+            .message, .modify-message {
+                font-size: 0.98rem;
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">Back to Home</a>
+    <div class="form-container">
+        <h2>Delete Borrower</h2>
+        <form method="post" action="/delete">
+            <label for="borrower_id">Borrower ID</label>
+            <select id="borrower_id" name="borrower_id" class="styled-select" required>
+                <option value="" disabled selected>Select Borrower ID</option>
+                {% for id in borrower_ids %}
+                    <option value="{{ id }}">{{ id }}</option>
+                {% endfor %}
+            </select>
+            <label for="name">Name</label>
+            <select id="name" name="name" class="styled-select" required>
+                <option value="" disabled selected>Select Name</option>
+                <!-- Options will be filled by JS -->
+            </select>
+            <button type="submit" class="delete-btn">Delete</button>
+            <div class="message-placeholder">
+                {% if message %}
+                <span class="message">{{ message }}</span>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <div class="form-container modify-container">
+        <h2>Subtract Amount</h2>
+        <form method="post" action="/subtract_amount">
+            <label for="sub_borrower_id">Borrower ID</label>
+            <select id="sub_borrower_id" name="borrower_id" class="styled-select" required>
+                <option value="" disabled selected>Select Borrower ID</option>
+                {% for id in borrower_ids %}
+                    <option value="{{ id }}">{{ id }}</option>
+                {% endfor %}
+            </select>
+            <label for="sub_name">Name</label>
+            <select id="sub_name" name="name" class="styled-select" required>
+                <option value="" disabled selected>Select Name</option>
+                <!-- Options will be filled by JS -->
+            </select>
+            <label for="sub_amount">Amount to Subtract</label>
+            <input type="number" id="sub_amount" name="amount" class="styled-input" required min="1" placeholder="Enter amount to subtract">
+            <button type="submit" class="modify-btn">Subtract Amount</button>
+            <div class="message-placeholder">
+                {% if subtract_message %}
+                <span class="modify-message">{{ subtract_message }}</span>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <script>
+        // Mapping from backend for auto-fill
+        const idNameMap = JSON.parse('{{ id_name_map | safe }}');
+        // Delete box
+        const idSelect = document.getElementById('borrower_id');
+        const nameSelect = document.getElementById('name');
+        idSelect.addEventListener('change', function() {
+            const names = idNameMap[this.value] || [];
+            nameSelect.innerHTML = '<option value="" disabled selected>Select Name</option>';
+            names.forEach(function(name) {
+                const opt = document.createElement('option');
+                opt.value = name;
+                opt.textContent = name;
+                nameSelect.appendChild(opt);
+            });
+            nameSelect.selectedIndex = 0;
+        });
+        // Subtract box
+        const subIdSelect = document.getElementById('sub_borrower_id');
+        const subNameSelect = document.getElementById('sub_name');
+        if(subIdSelect && subNameSelect) {
+            subIdSelect.addEventListener('change', function() {
+                const names = idNameMap[this.value] || [];
+                subNameSelect.innerHTML = '<option value="" disabled selected>Select Name</option>';
+                names.forEach(function(name) {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    subNameSelect.appendChild(opt);
+                });
+                subNameSelect.selectedIndex = 0;
+            });
+        }
+        // Animate input and select on focus
+        document.querySelectorAll('select').forEach(function(el) {
+            el.addEventListener('focus', function() {
+                el.style.boxShadow = "0 2px 12px 0 rgba(190,18,60,0.18)";
+                el.style.transition = "box-shadow 0.3s";
+            });
+            el.addEventListener('blur', function() {
+                el.style.boxShadow = "";
+            });
+        });
+        // Animate message removal after 3 seconds
+        window.addEventListener('DOMContentLoaded', function() {
+            var msg = document.querySelector('.message');
+            if(msg) {
+                setTimeout(function() {
+                    msg.style.transition = "opacity 0.7s";
+                    msg.style.opacity = 0;
+                }, 3000);
+            }
+            var modMsg = document.querySelector('.modify-message');
+            if(modMsg) {
+                setTimeout(function() {
+                    modMsg.style.transition = "opacity 0.7s";
+                    modMsg.style.opacity = 0;
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

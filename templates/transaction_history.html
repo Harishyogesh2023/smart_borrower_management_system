@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction History</title>
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 0.7rem 2.2rem;
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+            transition: background 0.2s, transform 0.2s;
+            text-align: center;
+            position: fixed;
+            top: 32px;
+            left: 32px;
+            margin: 0;
+            z-index: 10;
+        }
+        .back-btn:hover {
+            background: linear-gradient(90deg, #818cf8 60%, #6366f1 100%);
+            transform: translateY(-2px) scale(1.03);
+            color: #fff;
+        }
+        .table-container {
+            max-width: 700px;
+            margin: 2.5rem auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+            padding: 2rem 2.5rem 2.5rem 2.5rem;
+        }
+        h2 {
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 0.85rem 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1rem;
+        }
+        th {
+            background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr {
+            transition: background 0.2s, transform 0.2s;
+        }
+        tr:hover td {
+            background: #eef2ff;
+            transform: scale(1.01);
+        }
+        .no-data {
+            text-align: center;
+            color: #be123c;
+            font-weight: 500;
+            padding: 1.5rem 0;
+            background: #fef2f2;
+            border-radius: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .table-container {
+                padding: 1rem 0.2rem 1.2rem 0.2rem;
+            }
+            .back-btn {
+                left: 10px;
+                top: 10px;
+                padding: 0.6rem 1.1rem;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/view" class="back-btn">Back to List</a>
+    <div class="table-container">
+        <h2>Transaction History for {{ name }} (ID: {{ borrower_id }})</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                    <tr>
+                        <td>{{ tx.date }}</td>
+                        <td>{{ tx.amount }}</td>
+                        <td>{{ tx.type }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="no-data">No transactions found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
